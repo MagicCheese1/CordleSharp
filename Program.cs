@@ -20,6 +20,7 @@ namespace CordleSharp {
                 Console.WriteLine ("_ _ _ _ _");
                 Console.WriteLine ("         ");
             }
+            Console.ReadKey();
         }
     }
 }
