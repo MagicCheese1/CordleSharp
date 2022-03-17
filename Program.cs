@@ -12,6 +12,14 @@ namespace CordleSharp {
 
             // string TheWinningWord = "eblbe";
             string TheWinningWord = PossibleWords[random.Next (1, PossibleWords.Count () - 1)];
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.Clear ();
+            Console.SetCursorPosition (0, 0);
+            for (int i = 0; i < 6; i++) {
+                Console.WriteLine ("_ _ _ _ _");
+                Console.WriteLine ("         ");
+            }
         }
     }
 }
