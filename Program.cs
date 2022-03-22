@@ -1,6 +1,7 @@
-namespace CordleSharp {
+﻿namespace CordleSharp {
     public class Program {
         private static string allowedLetters = "QWERTYUIOPASDFGHJKLZXCVBNM";
+        private Dictionary<Char, LetterColor> coloredLetters = new Dictionary<Char, LetterColor> ();
         public static void Main (string[] args) {
             //PossibleWords is used for generating the winning word.
             //Both PossibleWords and AllowedWords are used for checking if the players input is valid.
@@ -20,7 +21,83 @@ namespace CordleSharp {
                 Console.WriteLine ("_ _ _ _ _");
                 Console.WriteLine ("         ");
             }
-            Console.ReadKey();
+            for (int i = 0; i < 6; i++) {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.SetCursorPosition (0, i * 2);
+                Boolean next = false;
+                string inputWord = String.Empty;
+                var cursorPositon = Console.GetCursorPosition ();
+                while (next == false) {
+                    cursorPositon = Console.GetCursorPosition ();
+                    ConsoleKeyInfo input = Console.ReadKey ();
+                    switch (input.Key) {
+                        case ConsoleKey.Enter:
+                            if (AllowedWords.Contains (inputWord.ToLower ()) || PossibleWords.Contains (inputWord.ToLower ())) {
+                                ColoredLetter[] coloredWord = new ColoredLetter[] { null, null, null, null, null };
+                                var winningWord = TheWinningWord.ToUpper ();
+                                for (int j = 0; j < 5; j++) {
+                                    if (inputWord[j] == winningWord[j]) {
+                                        coloredWord[j] = new ColoredLetter (inputWord[j], LetterColor.GREEN);
+                                        winningWord = winningWord.Remove (j, 1).Insert (j, " ");
+                                    } else if (winningWord.Contains (inputWord[j])) {
+                                        coloredWord[j] = new ColoredLetter (inputWord[j], LetterColor.YELLOW);
+                                        int index = winningWord.IndexOf (inputWord[j]);
+                                        winningWord = winningWord.Remove (index, 1).Insert (index, " ");
+                                    } else {
+                                        coloredWord[j] = new ColoredLetter (inputWord[j], LetterColor.GRAY);
+                                    }
+                                }
+                                Console.SetCursorPosition (0, i * 2);
+                                Console.ForegroundColor = ConsoleColor.Black;
+                                foreach (var letter in coloredWord) {
+                                    Console.BackgroundColor = (ConsoleColor) letter.LetterColor;
+                                    Console.Write (letter.Letter + " ");
+                                }
+                                next = true;
+                                //TODO: CHECK IF CORRECT
+                            } else {
+                                Console.SetCursorPosition (cursorPositon.Left, cursorPositon.Top);
+                            }
+                            break;
+                        case ConsoleKey.Backspace:
+                            if (String.IsNullOrEmpty (inputWord)) {
+                                continue;
+                            }
+                            cursorPositon = Console.GetCursorPosition ();
+                            inputWord = inputWord.Remove (inputWord.Length - 1);
+                            Console.SetCursorPosition (cursorPositon.Left - 1, cursorPositon.Top);
+                            Console.Write ("_");
+                            Console.SetCursorPosition (cursorPositon.Left - 1, cursorPositon.Top);
+                            break;
+                        default:
+                            if (inputWord.Length >= 5) {
+                                cursorPositon = Console.GetCursorPosition ();
+                                Console.SetCursorPosition (cursorPositon.Left - 1, cursorPositon.Top);
+                                Console.Write ("  ");
+                                Console.SetCursorPosition (cursorPositon.Left - 1, cursorPositon.Top);
+                                continue;
+                            }
+                            cursorPositon = Console.GetCursorPosition ();
+                            Console.SetCursorPosition (cursorPositon.Left - 1, cursorPositon.Top);
+                            if (allowedLetters.Contains (((char) input.Key))) {
+                                inputWord += ((char) input.Key);
+                                Console.Write ((char) input.Key + " ");
+                            } else {
+                                Console.Write ("_");
+                                Console.SetCursorPosition (cursorPositon.Left - 1, cursorPositon.Top);
+                            }
+                            break;
+                    }
+                    cursorPositon = Console.GetCursorPosition ();
+                    Console.SetCursorPosition (0, 13);
+                    Console.WriteLine ("       ");
+                    Console.SetCursorPosition (0, 13);
+                    Console.WriteLine (inputWord);
+                    Console.SetCursorPosition (cursorPositon.Left, cursorPositon.Top);
+                }
+            }
+            Console.ReadKey ();
         }
     }
 }
