@@ -1,15 +1,15 @@
-﻿namespace CordleSharp {
+namespace CordleSharp {
     public class Program {
         private static string allowedLetters = "QWERTYUIOPASDFGHJKLZXCVBNM";
         private Dictionary<Char, LetterColor> coloredLetters = new Dictionary<Char, LetterColor> ();
         public static void Main (string[] args) {
             //PossibleWords is used for generating the winning word.
             //Both PossibleWords and AllowedWords are used for checking if the players input is valid.
-            var possibleWordsFile = File.ReadAllLines ("L:/CordleSharp/PossibleWords.txt");
-            var allowedWordsFile = File.ReadAllLines ("L:/CordleSharp/AllowedWords.txt");
-            List<String> PossibleWords = new List<string> (possibleWordsFile);
-            List<String> AllowedWords = new List<string> (allowedWordsFile);
-            Random random = new Random ();
+            var possibleWordsFile = File.ReadAllLines(Directory.GetCurrentDirectory() + "/PossibleWords.txt");
+            var allowedWordsFile = File.ReadAllLines(Directory.GetCurrentDirectory() + "/AllowedWords.txt");
+            List<String> PossibleWords = new List<string>(possibleWordsFile);
+            List<String> AllowedWords = new List<string>(allowedWordsFile);
+            Random random = new Random();
 
             // string TheWinningWord = "eblbe";
             string TheWinningWord = PossibleWords[random.Next (1, PossibleWords.Count () - 1)];
